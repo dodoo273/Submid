@@ -1,17 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+type Params = {
+  id: string;
+};
+
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<Params> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
     const body = await request.json();
     const { status } = body;
 
     const reservation = await prisma.reservation.update({
-      where: { id },
+      where: { id: Number(id) },
       data: { status },
     });
 
@@ -27,13 +31,13 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<Params> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
 
     await prisma.reservation.delete({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     return NextResponse.json({ message: "Reservation deleted" });
