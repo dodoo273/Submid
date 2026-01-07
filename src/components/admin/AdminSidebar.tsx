@@ -1,27 +1,31 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AdminSidebar() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/admin/login')
-    router.refresh()
-  }
+    // Logout removed — just redirect to home
+    router.push("/");
+    router.refresh();
+  };
 
   const navItems = [
-    { name: 'Menu Items', href: '/admin', icon: 'fa-list' },
-    { name: 'Categories', href: '/admin/categories', icon: 'fa-folder' },
-    { name: 'Promos', href: '/admin/promos', icon: 'fa-tags' },
-    { name: 'Messages', href: '/admin/messages', icon: 'fa-envelope' },
-    { name: 'Reservations', href: '/admin/reservations', icon: 'fa-calendar-check' },
-  ]
+    { name: "Menu Items", href: "/admin", icon: "fa-list" },
+    { name: "Categories", href: "/admin/categories", icon: "fa-folder" },
+    { name: "Promos", href: "/admin/promos", icon: "fa-tags" },
+    { name: "Messages", href: "/admin/messages", icon: "fa-envelope" },
+    {
+      name: "Reservations",
+      href: "/admin/reservations",
+      icon: "fa-calendar-check",
+    },
+  ];
 
   return (
     <>
@@ -62,22 +66,23 @@ export default function AdminSidebar() {
 
         <nav className="flex-1 space-y-2">
           {navItems.map((item) => {
-            const isActive = pathname === item.href
+            const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsSidebarOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-semibold
-                  ${isActive
-                    ? 'bg-amber-600 text-white shadow-md'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                  ${
+                    isActive
+                      ? "bg-amber-600 text-white shadow-md"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
                   }`}
               >
                 <i className={`fas ${item.icon}`}></i>
                 <span>{item.name}</span>
               </Link>
-            )
+            );
           })}
         </nav>
 
@@ -99,6 +104,5 @@ export default function AdminSidebar() {
         </div>
       </aside>
     </>
-  )
+  );
 }
-
