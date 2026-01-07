@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model MainCategory {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique @db.VarChar(150)
+  description   String?        @db.Text
+  icon          String?        @db.VarChar(100)
+  displayOrder  Int            @default(0) @map("display_order")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  subCategories SubCategory[]
+
+  @@index([displayOrder])
+  @@map("main_categories")
+}
+
+model SubCategory {
+  id             Int          @id @default(autoincrement())
+  mainCategoryId Int          @map("main_category_id")
+  name           String       @db.VarChar(150)
+  description    String?      @db.Text
+  displayOrder   Int          @default(0) @map("display_order")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  mainCategory   MainCategory @relation(fields: [mainCategoryId], references: [id], onDelete: Cascade)
+  menuItems      MenuItem[]
+
+  @@index([mainCategoryId])
+  @@index([displayOrder])
+  @@map("sub_categories")
+}
+
+model MenuItem {
+  id              Int          @id @default(autoincrement())
+  subCategoryId   Int          @map("sub_category_id")
+  name            String       @db.VarChar(150)
+  description     String?      @db.Text
+  price           Decimal      @db.Decimal(10, 2)
+  imageUrl        String?      @map("image_url") @db.VarChar(255)
+  isFeatured      Boolean      @default(false) @map("is_featured")
+  isAvailable     Boolean      @default(true) @map("is_available")
+  displayOrder    Int          @default(0) @map("display_order")
+  preparationTime Int?         @map("preparation_time")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  deletedAt       DateTime?    @map("deleted_at")
+  subCategory     SubCategory  @relation(fields: [subCategoryId], references: [id])
+
+  @@index([subCategoryId])
+  @@index([isFeatured])
+  @@index([isAvailable])
+  @@index([deletedAt])
+  @@map("menu_items")
+}
+
+model Promo {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  imageUrl    String?  @map("image_url") @db.VarChar(500)
+  startAt     DateTime @map("start_at")
+  endAt       DateTime @map("end_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("promos")
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  message   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_messages")
+}
+
+model Reservation {
+  id              Int      @id @default(autoincrement())
+  fullName        String   @map("full_name") @db.VarChar(255)
+  whatsappNumber  String   @map("whatsapp_number") @db.VarChar(20)
+  reservationDate DateTime @map("reservation_date") @db.Date
+  arrivalTime     String   @map("arrival_time") @db.VarChar(10)
+  numberOfGuests  Int      @map("number_of_guests")
+  areaChoice      String   @map("area_choice") @db.VarChar(100)
+  additionalNotes String?  @map("additional_notes") @db.Text
+  status          String   @default("pending") @db.VarChar(50)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("reservations")
+}
