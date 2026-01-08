@@ -10,7 +10,7 @@ interface SmartImageProps extends Omit<ImageProps, "src"> {
 
 export default function SmartImage({
   src,
-  fallbackSrc = "/images/no-image.png",
+  fallbackSrc = "/images/no-image.svg",
   ...props
 }: SmartImageProps) {
   const [currentSrc, setCurrentSrc] = useState<string>(src);

@@ -38,7 +38,7 @@ export function getImageUrl(
   type: "menu" | "promo" = "menu"
 ): string {
   if (!imageUrl) {
-    return "/images/no-image.png";
+    return "/images/no-image.svg";
   }
 
   // External URL

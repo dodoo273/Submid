@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
-  const pathname = usePathname()
-  const isAdminPage = pathname?.startsWith('/admin')
+  const pathname = usePathname();
+  const isAdminPage = pathname?.startsWith("/admin");
 
-  if (isAdminPage) return null
+  if (isAdminPage) return null;
 
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-300 py-10 md:py-16 border-t border-gray-800">
@@ -21,7 +21,11 @@ export default function Footer() {
             <div className="space-y-3 text-gray-400 text-center md:text-left">
               <p className="flex items-start gap-2 text-sm leading-relaxed justify-center md:justify-start">
                 <i className="fas fa-map-marker-alt mt-1 text-amber-500"></i>
-                <span>123 E, Brooklyn Avenue<br />Jakarta, Indonesia</span>
+                <span>
+                  123 E, Brooklyn Avenue
+                  <br />
+                  Jakarta, Indonesia
+                </span>
               </p>
               <p className="flex items-center gap-2 text-sm hover:text-amber-400 transition-colors justify-center md:justify-start">
                 <i className="fas fa-phone text-amber-500"></i>
@@ -40,18 +44,34 @@ export default function Footer() {
               Our Coffee
             </h3>
             <div className="flex flex-col space-y-3">
-              <Link href="/menu" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Premium Beans
+              <Link
+                href="/menu"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Premium Beans
               </Link>
-              <Link href="/menu" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Specialty Drinks
+              <Link
+                href="/menu"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Specialty Drinks
               </Link>
-              <Link href="/menu" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Cold Brews
+              <Link
+                href="/menu"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Cold Brews
               </Link>
-              <Link href="/menu" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Hot Beverages
-              </Link>
+              <Link
+                href="/menu"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Hot Beverages
+              </Link>   
             </div>
           </div>
 
@@ -59,19 +79,35 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold text-white mb-5 font-playfair text-center md:text-left">
               Quick Links
-            </h3>
+            </h3> 
             <div className="flex flex-col space-y-3">
-              <Link href="/about" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> About Us
+              <Link
+                href="/about"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                About Us
               </Link>
-              <Link href="/contact" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Contact Us
+              <Link
+                href="/contact"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Contact Us
               </Link>
-              <Link href="/menu" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Our Menu
+              <Link
+                href="/menu"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Our Menu
               </Link>
-              <Link href="/promo" className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2">
-                <i className="fas fa-chevron-right text-xs text-amber-500"></i> Promotions
+              <Link
+                href="/promo"
+                className="text-sm text-gray-400 hover:text-amber-400 hover:translate-x-1 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-chevron-right text-xs text-amber-500"></i>{" "}
+                Promotions
               </Link>
             </div>
           </div>
@@ -82,7 +118,8 @@ export default function Footer() {
               Follow Us
             </h3>
             <p className="text-sm mb-5 text-gray-400 leading-relaxed">
-              Brewing excellence since 2020. Join our community for the latest updates and exclusive offers.
+              Brewing excellence since 2020. Join our community for the latest
+              updates and exclusive offers.
             </p>
             <div className="flex gap-3 justify-center md:justify-start">
               <a
@@ -111,13 +148,19 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-3 sm:gap-4">
-          <p className="text-sm text-gray-500 text-center">&copy; 2025 Submid Coffee. All rights reserved.</p>
+          <p className="text-sm text-gray-500 text-center">
+            &copy; 2025 Submid Coffee. All rights reserved.
+          </p>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm text-gray-500 items-center">
-            <a href="#" className="hover:text-amber-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-amber-400 transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-amber-400 transition-colors">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-amber-400 transition-colors">
+              Terms of Service
+            </a>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

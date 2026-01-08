@@ -32,33 +32,62 @@ export async function POST(request: NextRequest) {
     // Add timestamp to prevent duplicates
     const finalFilename = `${Date.now()}-${filename}`;
 
-    const uploadDir = path.join(process.cwd(), "public/uploads", folder);
+    // Upload to Supabase Storage
+    const bucket = process.env.SUPABASE_BUCKET || "uploads";
+    const filePath = `${folder}/${finalFilename}`;
 
-    // Ensure directory exists
+    // Initialize server-side supabase client lazily (gives clearer error if misconfigured)
+    let supabaseAdmin;
     try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
-      // Ignore if exists
+      const mod = await import("@/lib/supabaseAdmin");
+      supabaseAdmin = mod.getSupabaseAdmin();
+    } catch (e: any) {
+      console.error("Supabase configuration error:", e?.message || e);
+
+      // Development fallback: write to local `public/uploads` so developers can test without Supabase keys
+      if (process.env.NODE_ENV !== "production") {
+        try {
+          const uploadDir = path.join(process.cwd(), "public/uploads", folder);
+          await mkdir(uploadDir, { recursive: true });
+          const localPath = path.join(uploadDir, finalFilename);
+          await writeFile(localPath, buffer);
+          const publicUrl = `/uploads/${folder}/${finalFilename}`;
+          console.warn("Falling back to local public/uploads for development: ", localPath);
+          return NextResponse.json({ filename: finalFilename, url: publicUrl });
+        } catch (fsErr) {
+          console.error("Local fallback write failed:", fsErr);
+          return NextResponse.json(
+            { error: "Server misconfiguration and local fallback failed" },
+            { status: 500 }
+          );
+        }
+      }
+
+      return NextResponse.json(
+        { error: "Server misconfiguration: missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" },
+        { status: 500 }
+      );
     }
 
-    const filepath = path.join(uploadDir, finalFilename);
+    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+      .from(bucket)
+      .upload(filePath, buffer, {
+        contentType: (file as File).type,
+        upsert: false,
+      });
 
-    await writeFile(filepath, buffer);
+    if (uploadError) {
+      console.error("Supabase upload error:", uploadError);
+      return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    }
 
-    // Return URL relative to public
-    const url = finalFilename; // Just the filename as stored in DB in old app?
-    // Wait, old app stored just URL? Or filename?
-    // includes/utility_functions.php: uploadImage returns just filename string, or full path?
-    // "return $fileName;"
-    // And getImageUrl in utility uses: UPLOAD_MENU_URL . $image
-    // So DB stores just the filename usually.
-    // My getImageUrl in utils.ts: const folder = type === 'promo' ? 'promos' : 'menu'; return `/uploads/${folder}/${imageUrl}`
-    // So I should return just the filename.
+    const publicResp = await supabaseAdmin.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
 
-    return NextResponse.json({
-      filename: finalFilename,
-      url: `/uploads/${folder}/${finalFilename}`,
-    });
+    const publicUrl = publicResp?.data?.publicUrl || `/uploads/${folder}/${finalFilename}`;
+
+    return NextResponse.json({ filename: finalFilename, url: publicUrl });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });

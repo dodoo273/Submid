@@ -72,7 +72,7 @@ export default function AdminClient({
       });
       if (res.ok) {
         const json = await res.json();
-        setFormData((prev) => ({ ...prev, imageUrl: json.filename }));
+        setFormData((prev) => ({ ...prev, imageUrl: json.url }));
       } else {
         alert("Upload failed");
       }
